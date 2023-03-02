@@ -1,6 +1,7 @@
 import os
 
 from flask import Flask
+from . import db
 
 
 def create_app(test_config=None):
@@ -19,3 +20,8 @@ def create_app(test_config=None):
         os.makedirs(app.instance_path)
     except OSError:
         pass
+
+    from . import db
+    db.init_app(app)
+
+    return app
