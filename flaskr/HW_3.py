@@ -3,23 +3,25 @@ from faker import Faker
 import csv
 from statistics import mean
 import requests
+from flask import Blueprint, request
 
 
 app = Flask(__name__)
+hw3 = Blueprint('hw3', __name__, url_prefix='/hw3')
 
 
-@app.route("/requirements/")
+@hw3.route('/requirements/')
 def requirements():
     with open(r'C:\Users\Котик\PycharmProjects\PythoProFlask\requirements.txt', "r") as file:
         requirement = file.read()
     return '<pre>{}</pre>'.format(requirement)
 
 
-@app.route("/generate-users/")
+@hw3.route('/generate-users/')
 def generate_users():
     fake = Faker()
     list_name_mail = []
-    users_count = request.args.get('count', 0, type=int)
+    users_count = request.args.get('count', 100, type=int)
     for i in range(users_count):
         first_name = fake.first_name()
         last_name = fake.last_name()
@@ -29,7 +31,7 @@ def generate_users():
     return '<pre>{}</pre>'.format(res)
 
 
-@app.route("/mean/")
+@hw3.route('/mean/')
 def avarage():
     with open(r'C:\Users\Котик\PycharmProjects\PythoProFlask\hw.csv', "r") as file:
         reader = csv.DictReader(file)
@@ -46,7 +48,7 @@ def avarage():
     return res
 
 
-@app.route("/space/")
+@hw3.route('/space/')
 def astronauts():
     r = requests.get('http://api.open-notify.org/astros.json')
     space_station = r.json()
